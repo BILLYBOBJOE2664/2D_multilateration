@@ -6,6 +6,7 @@ import numpy as np
 # This script uses the equations described here:
 # https://en.wikipedia.org/wiki/Multilateration#math_4
 # https://stackoverflow.com/a/2188606
+# https://msi.nga.mil/MSISiteContent/StaticFiles/Calculators/degree.html
 
 #-------------------------Notes-------------------------------------------------
 # NOTE: Mention all bugs and future work needed here
@@ -13,13 +14,43 @@ import numpy as np
 # BUG: Float div by zero error comes when all time inputs are equal (OPEN)
 # BUG: Longitude of the calculated coordinates is only accurate upto 1st decimal.
 #      It should be accurate upto 3 decimals at least.
+#      Suspected Reason: The constants are measured at the equator. The given
+#      Origin is at a point above the equator. Hence calculate suitable constants
+#      for the position and see. (OPEN)
+
+
+#-------------------------Constants---------------------------------------------
+# Speed of sound
+SOUND_VELOCITY = 340.0 # TODO: Have a separate function to calculate this.
+
+# value in metres (m)
+ONE_DEG_LAT_EQUATOR = 110574 # prev: 110540
+
+# value in metres (m)
+ONE_DEG_LONG_EQUATOR = 111320
+
+# LAT/ LONG of Kirigalpotta trailhead - Horton Plains NP
+origin_lat_long_arr = [6.801746, 80.806442]
 
 #-------------------------Inputs------------------------------------------------
+
+# Uncomment only one method as needed for testing
+
+# MANUAL_TESTING_BY_TIME-----------------------------------------------------
 # Get Receival times at the 3 mics A, B, C
-mic_a = input("Enter Receival time at A: ")
-mic_b = input("Enter Receival time at B: ")
-mic_c = input("Enter Receival time at C: ")
-mic_d = input("Enter Receival time at D: ")
+# mic_a = input("Enter Receival time at A: ")
+# mic_b = input("Enter Receival time at B: ")
+# mic_c = input("Enter Receival time at C: ")
+# mic_d = input("Enter Receival time at D: ")
+
+# MANUAL_TESTING_BY_PROVIDING_UNKNOWN_COORDINATE-----------------------------
+sound_src_x = input("Enter Sound Source X: ")
+sound_src_y = input("Enter Sound Source Y: ")
+
+mic_a = round(math.hypot((sound_src_x - 0), (sound_src_y - 0))/ SOUND_VELOCITY, 4)
+mic_b = round(math.hypot((sound_src_x - 100), (sound_src_y - 0))/ SOUND_VELOCITY, 4)
+mic_c = round(math.hypot((sound_src_x - 0), (sound_src_y - 100))/ SOUND_VELOCITY, 4)
+mic_d = round(math.hypot((sound_src_x - 100), (sound_src_y - 100))/ SOUND_VELOCITY, 4)
 
 # Get Positions of the 3 mics at A, B, C
 # TODO: These values must be set as constants
@@ -30,18 +61,6 @@ vector_a = [0, 0, mic_a]
 vector_b = [100, 0, mic_b]
 vector_c = [0, 100, mic_c]
 vector_d = [100, 100, mic_d]
-#-------------------------Constants---------------------------------------------
-# Speed of sound
-SOUND_VELOCITY = 340.0 # TODO: Have a separate function to calculate this.
-
-# value in metres (m)
-ONE_DEG_LAT_EQUATOR = 110540
-
-# value in metres (m)
-ONE_DEG_LONG_EQUATOR = 111320
-
-# LAT/ LONG of Kirigalpotta trailhead - Horton Plains NP
-origin_lat_long_arr = [6.801746, 80.806442]
 
 #-------------------------Function Definitions----------------------------------
 
@@ -50,7 +69,6 @@ origin_lat_long_arr = [6.801746, 80.806442]
 
 def calculate_v_tau(node_time, origin_time):
     return (SOUND_VELOCITY*node_time - SOUND_VELOCITY*origin_time)
-
 
 def calculate_COF_A(node_arr, origin_arr, node_1_arr):
     A = (2*node_arr[0]/calculate_v_tau(node_arr[2], origin_arr[2])) - (2*node_1_arr[0]/calculate_v_tau(node_1_arr[2], origin_arr[2]))
@@ -99,15 +117,15 @@ cof_b2 = calculate_COF_B(vector_d, vector_a, vector_b)
 cof_c2 = calculate_COF_C(vector_d, vector_a, vector_b)
 cof_d2 = calculate_COF_D(vector_d, vector_a, vector_b)
 
-print cof_a1
-print cof_b1
-print cof_c1
-print cof_d1
-
-print cof_a2
-print cof_b2
-print cof_c2
-print cof_d2
+# print cof_a1
+# print cof_b1
+# print cof_c1
+# print cof_d1
+#
+# print cof_a2
+# print cof_b2
+# print cof_c2
+# print cof_d2
 
 # By simplifying the equations xA1 + yB1 + D1 = 0 & xA2 + yB2 + D2 = 0
 # It can be found that,
@@ -127,13 +145,14 @@ angle_to_x_axis = math.degrees(math.atan(y_src/x_src))
 
 sound_src_pos = find_sound_lat_long(origin_lat_long_arr, x_src, y_src)
 
-alt1 = np.array([[cof_a1,cof_b1],[cof_a2,cof_b2]])
-alt2 = np.array([-cof_d1, -cof_d2])
-altans = np.linalg.solve(alt1,alt2)
-print "altans: ", altans
+# alt1 = np.array([[cof_a1,cof_b1],[cof_a2,cof_b2]])
+# alt2 = np.array([-cof_d1, -cof_d2])
+# altans = np.linalg.solve(alt1,alt2)
+# print "altans: ", altans
 
 print "x_src: ", x_src
 print "y_src: ", y_src
-
-print "Angle to X axis: ", angle_to_x_axis
-print str(sound_src_pos).strip('[]')
+print "Accuracy X: ", round((x_src/sound_src_x)*100, 2)
+print "Accuracy Y: ", round((y_src/sound_src_y)*100, 2)
+# print "Angle to X axis: ", angle_to_x_axis
+# print str(sound_src_pos).strip('[]')
