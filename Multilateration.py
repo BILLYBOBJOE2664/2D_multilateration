@@ -79,7 +79,7 @@ vector_d = [100, 100, mic_d]
 # DONE: Integrated TDOA calculation
 def calculate_v_tau(node_time, origin_time):
     # return (SOUND_VELOCITY*node_time - SOUND_VELOCITY*origin_time)
-    return tdoa(node_time, origin_time)
+    return (SOUND_VELOCITY * tdoa(node_time, origin_time))
 
 def calculate_COF_A(node_arr, origin_arr, node_1_arr):
     A = (2*node_arr[0]/calculate_v_tau(node_arr[2], origin_arr[2])) - (2*node_1_arr[0]/calculate_v_tau(node_1_arr[2], origin_arr[2]))
@@ -163,9 +163,12 @@ sound_src_pos = find_sound_lat_long(origin_lat_long_arr, x_src, y_src)
 
 print "x_src: ", round(x_src, 4)
 print "y_src: ", round(y_src, 4)
-print "Accuracy X: ", round((x_src/sound_src_x)*100, 4)
-print "Accuracy Y: ", round((y_src/sound_src_y)*100, 4)
-print "Difference percentage in X: ", round(round((x_src/sound_src_x)*100, 4) - 100, 4)
-print "Difference percentage in Y: ", round(round((y_src/sound_src_y)*100, 4) - 100, 4)
+print str(sound_src_pos).strip('[]')
+
+# ----------Uncomment for testing only------------------
+# print "Accuracy X: ", round((x_src/sound_src_x)*100, 4)
+# print "Accuracy Y: ", round((y_src/sound_src_y)*100, 4)
+# print "Difference percentage in X: ", round(round((x_src/sound_src_x)*100, 4) - 100, 4)
+# print "Difference percentage in Y: ", round(round((y_src/sound_src_y)*100, 4) - 100, 4)
 # print "Angle to X axis: ", angle_to_x_axis
 # print str(sound_src_pos).strip('[]')
