@@ -3,7 +3,7 @@
 import math
 import numpy as np
 import sys
-from TDOA/echo_delay import tdoa
+from TDOA.echo_delay import tdoa
 
 # This script uses the equations described here:
 # https://en.wikipedia.org/wiki/Multilateration#math_4
