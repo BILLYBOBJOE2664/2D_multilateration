@@ -1,9 +1,11 @@
 #!/usr/bin/python
-
+import time
 import math
 import numpy as np
 import sys
 from TDOA.echo_delay import tdoa
+
+print ("Start time: "+ time.strftime("%H:%M:%S"))
 
 # This script uses the equations described here:
 # https://en.wikipedia.org/wiki/Multilateration#math_4
@@ -164,6 +166,8 @@ sound_src_pos = find_sound_lat_long(origin_lat_long_arr, x_src, y_src)
 print "x_src: ", round(x_src, 4)
 print "y_src: ", round(y_src, 4)
 print str(sound_src_pos).strip('[]')
+
+print ("End time: "+ time.strftime("%H:%M:%S"))
 
 # ----------Uncomment for testing only------------------
 # print "Accuracy X: ", round((x_src/sound_src_x)*100, 4)
