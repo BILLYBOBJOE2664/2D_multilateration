@@ -39,6 +39,7 @@ def tdoa(point1,point2) :
             tau, _ = gcc_phat(sig_buf * window, ref_buf * window, fs=rate, max_tau=1)
             timelist.append(( tau *1000)/0.0226)
             print ((tau*1000))
-    print(timelist[4])
+    # print(timelist[4])
+    return (timelist[4])
         #tau, _ = gcc_phat(sig_buf, ref_buf, fs=rate, max_tau=1)
         #print(( tau *1000 )/0.0226)

@@ -1,10 +1,11 @@
 from pydub import AudioSegment
 import wave
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import numpy as np
 
 def removeNoice(signal):
-    refSignal =  AudioSegment.from_wav(signal+".wav")
+    # refSignal =  AudioSegment.from_wav(signal+".wav")
+    refSignal =  AudioSegment.from_wav(signal)
     loudness = refSignal.max_dBFS
     length = refSignal.sample_width
     frameRate = refSignal.frame_rate
