@@ -10,6 +10,7 @@ def tdoa(point1,point2) :
     #     print('Usage: {} near.wav far.wav'.format(sys.argv[0]))
     #     sys.exit(1)
     #we can improve the code by avoiding redoing same process by checking wheather _clear is available already ....
+    print("Localization in progress...")
     firstPoint = point1
     secondPoint = point2
     # removeNoice(sys.argv[1])
@@ -38,7 +39,7 @@ def tdoa(point1,point2) :
             ref_buf = np.fromstring(ref, dtype='int16')
             tau, _ = gcc_phat(sig_buf * window, ref_buf * window, fs=rate, max_tau=1)
             timelist.append(( tau *1000)/0.0226)
-            print ((tau*1000))
+            # print ((tau*1000))
     # print(timelist[4])
     return (timelist[4])
         #tau, _ = gcc_phat(sig_buf, ref_buf, fs=rate, max_tau=1)

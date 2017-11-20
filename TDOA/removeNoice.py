@@ -10,10 +10,10 @@ def removeNoice(signal):
     length = refSignal.sample_width
     frameRate = refSignal.frame_rate
     frameCount = refSignal.frame_count()
-    print ("Loudness    :"+str(loudness))
-    print("NumberOfFrames   :"+str(frameCount))
-    print ("FrameRate   :"+str(frameRate))
-    print ("SampleWidth :"+str(length))
+    # print ("Loudness    :"+str(loudness))
+    # print("NumberOfFrames   :"+str(frameCount))
+    # print ("FrameRate   :"+str(frameRate))
+    # print ("SampleWidth :"+str(length))
     new = refSignal.high_pass_filter(1000)
     name = signal + "_clear.wav"
     new.export(name, format="wav")
